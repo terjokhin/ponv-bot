@@ -6,7 +6,11 @@ version := "0.0.1"
 
 scalaVersion := "2.12.7"
 
-libraryDependencies += "com.bot4s" %% "telegram-core" % "4.0.0-RC2"
+libraryDependencies ++= Seq(
+  "org.typelevel" %% "cats-tagless-macros" % "0.1.0",
+  "com.bot4s" %% "telegram-core" % "4.0.0-RC2",
+  "org.typelevel" %% "cats-effect" % "1.0.0"
+)
 
 scalacOptions ++= Seq(
   "-deprecation",
@@ -21,3 +25,7 @@ scalacOptions ++= Seq(
   "-Ywarn-numeric-widen",
   "-Ypartial-unification"
 )
+
+addCompilerPlugin("org.scalameta" % "paradise" % "3.0.0-M11" cross CrossVersion.patch)
+addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.8")
+addCompilerPlugin("com.olegpy" %% "better-monadic-for" % "0.2.4")
