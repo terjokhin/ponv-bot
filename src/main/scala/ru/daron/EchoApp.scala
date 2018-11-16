@@ -1,11 +1,8 @@
 package ru.daron
 
-import cats.MonadError
-import cats.data.EitherT
-import cats.effect._
-import cats.syntax.applicativeError._
-import cats.syntax.flatMap._
 import cats.effect.IO._
+import cats.effect._
+import cats.syntax.flatMap._
 import cats.syntax.functor._
 import com.bot4s.telegram.api.declarative.Commands
 import com.bot4s.telegram.api.{Polling, TelegramBot}

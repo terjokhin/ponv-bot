@@ -5,7 +5,6 @@ import cats.effect.concurrent.MVar
 import cats.syntax.functor._
 import cats.tagless.autoFunctorK
 
-@autoFunctorK(true)
 trait Store[K, V, F[_]] {
   def get(id: K): F[Option[V]]
 
