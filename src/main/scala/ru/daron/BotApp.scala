@@ -4,23 +4,12 @@ import cats.effect.IO._
 import cats.effect._
 import cats.syntax.flatMap._
 import cats.syntax.functor._
-import com.bot4s.telegram.api.declarative.Commands
-import com.bot4s.telegram.api.{Polling, TelegramBot}
-import com.bot4s.telegram.clients.ScalajHttpClient
+import ru.daron.bot.PonvBot
 import ru.daron.store.{Config, Store}
 
 import scala.io.StdIn
 
-object EchoApp extends IOApp {
-
-  class EchoBot[F[_], K, V](val token: String, store: Store[K, V, F]) extends TelegramBot with Polling with Commands {
-    val client = new ScalajHttpClient(token)
-
-    onMessage { implicit msg =>
-      println(msg.chat)
-      reply(msg.text.getOrElse(""))
-    }
-  }
+object BotApp extends IOApp {
 
   def app[F[_] : Concurrent, K, V] = for {
     store <- Store.createInMemory[F, K, V]
@@ -28,9 +17,9 @@ object EchoApp extends IOApp {
     config = Config.apply[F]
     token <- config.token
     _ <- console.print("Store created.")
-    bot = new EchoBot[F, K, V](token, store)
+    bot = new PonvBot[F, K, V](token, store)
     _ <- Sync[F].delay(bot.run())
-    _ <- Sync[F].delay(println("Bot Started. Enter any key to stop."))
+    _ <- console.print("Bot Started. Enter any key to stop.")
     _ <- Sync[F].delay(StdIn.readLine())
     _ <- Sync[F].delay(bot.shutdown())
   } yield bot
