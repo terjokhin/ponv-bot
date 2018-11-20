@@ -11,13 +11,13 @@ import scala.io.StdIn
 
 object BotApp extends IOApp {
 
-  def app[F[_] : Concurrent, K, V] = for {
+  def app[F[_] : ConcurrentEffect, K, V] = for {
     store <- Store.createInMemory[F, K, V]
     console = Console.apply[F]
     config = Config.apply[F]
     token <- config.token
     _ <- console.print("Store created.")
-    bot = new PonvBot[F, K, V](token, store)
+    bot = new PonvBot[F, K, V](token, store, console)
     _ <- Sync[F].delay(bot.run())
     _ <- console.print("Bot Started. Enter any key to stop.")
     _ <- Sync[F].delay(StdIn.readLine())
