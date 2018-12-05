@@ -4,7 +4,7 @@ import cats.effect.IO._
 import cats.effect._
 import cats.syntax.flatMap._
 import cats.syntax.functor._
-import ru.daron.bot.PonvBot
+import ru.daron.bot.{CommandExecutor, Parser, PonvBot}
 import ru.daron.store.{Config, Store}
 
 import scala.io.StdIn
@@ -17,7 +17,9 @@ object BotApp extends IOApp {
     config = Config.apply[F]
     token <- config.token
     _ <- console.print("Store created.")
-    bot = new PonvBot[F, K, V](token, store, console)
+    parser = Parser.apply[F]
+    executor = CommandExecutor.apply[F]
+    bot = new PonvBot[F, K, V](token, store, console, parser, executor)
     _ <- Sync[F].delay(bot.run())
     _ <- console.print("Bot Started. Enter any key to stop.")
     _ <- Sync[F].delay(StdIn.readLine())
