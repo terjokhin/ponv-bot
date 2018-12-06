@@ -9,7 +9,9 @@ scalaVersion := "2.12.7"
 libraryDependencies ++= Seq(
   "org.typelevel" %% "cats-tagless-macros" % "0.1.0",
   "com.bot4s" %% "telegram-core" % "4.0.0-RC2",
-  "org.typelevel" %% "cats-effect" % "1.0.0"
+  "org.typelevel" %% "cats-effect" % "1.0.0",
+  "ch.qos.logback" % "logback-classic" % "1.2.3",
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.9.0"
 )
 
 scalacOptions ++= Seq(
