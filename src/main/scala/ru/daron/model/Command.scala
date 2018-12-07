@@ -1,5 +1,6 @@
 package ru.daron.model
-import com.bot4s.telegram.models.Message
+
+import info.mukel.telegrambot4s.models.Message
 
 sealed trait Command
 
@@ -14,11 +15,15 @@ object Command {
 }
 
 case class KamilExcited(msg: String, username: String) extends Command {
-  val howMuch: Double = msg.filter(v => KamilExcited.code.contains(v)).length / 4
+  val howMuch: Double = {
+    val base = msg.filter(v => KamilExcited.code.contains(v)).length.toDouble / 4
+    val bonus = msg.count(_ == 'ъ') * 5.0
+    base + bonus
+  }
 }
 
 object KamilExcited {
-  val code = "амзх"
+  val code = "амзхъ"
 
   def isKamilExcited(s: String): Boolean = {
     code.filterNot(v => s.contains(v)).isEmpty && s.filterNot(v => code.contains(v)).length <= 3 && s.nonEmpty

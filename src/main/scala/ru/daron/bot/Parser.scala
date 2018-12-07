@@ -1,7 +1,7 @@
 package ru.daron.bot
 
 import cats.Applicative
-import com.bot4s.telegram.models.Message
+import info.mukel.telegrambot4s.models.Message
 import ru.daron.model.Command
 
 trait Parser[F[_]] {

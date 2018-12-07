@@ -1,7 +1,6 @@
 package ru.daron
 
 import cats.effect.Sync
-import com.typesafe.scalalogging.{Logger, StrictLogging}
 
 import scala.io.StdIn
 
@@ -13,9 +12,9 @@ trait Console[F[_]] {
 
 object Console {
 
-  def apply[F[_]: Sync]: Console[F] = new Console[F] with StrictLogging {
+  def apply[F[_]: Sync]: Console[F] = new Console[F] {
     override def read: F[String] = Sync[F].delay(StdIn.readLine())
 
-    override def print(s: String): F[Unit] = Sync[F].delay(logger.info(s))
+    override def print(s: String): F[Unit] = Sync[F].delay(println(s))
   }
 }

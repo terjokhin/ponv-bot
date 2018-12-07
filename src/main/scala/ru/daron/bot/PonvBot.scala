@@ -3,15 +3,14 @@ package ru.daron.bot
 import cats.effect.Effect
 import cats.syntax.flatMap._
 import cats.syntax.functor._
-import com.bot4s.telegram.api.declarative.Commands
-import com.bot4s.telegram.api.{Polling, TelegramBot}
-import com.bot4s.telegram.clients.ScalajHttpClient
-import com.bot4s.telegram.models.Message
+import info.mukel.telegrambot4s.api.declarative.Commands
+import info.mukel.telegrambot4s.api.{Polling, TelegramBot}
+import info.mukel.telegrambot4s.models.Message
 import ru.daron.Console
 import ru.daron.model.{EmptyResponse, MessageResponse}
 import ru.daron.store.Store
 
-class PonvBot[F[_], K, V](token: String,
+class PonvBot[F[_], K, V](override val token: String,
                           store: Store[K, V, F],
                           console: Console[F],
                           parser: Parser[F],
@@ -19,8 +18,6 @@ class PonvBot[F[_], K, V](token: String,
                          (implicit F: Effect[F]) extends TelegramBot
   with Polling
   with Commands {
-
-  val client = new ScalajHttpClient(token)
 
   onMessage { implicit msg => F.toIO(replyEchoMessage).unsafeToFuture() }
 
@@ -34,4 +31,5 @@ class PonvBot[F[_], K, V](token: String,
         reply(resp.toString)
     }
   } yield ()
+
 }
