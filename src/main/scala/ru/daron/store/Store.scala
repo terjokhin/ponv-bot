@@ -12,7 +12,8 @@ trait Store[K, V, F[_]] {
 }
 
 object Store {
-  def createInMemory[F[_] : Concurrent, K, V]: F[Store[K, V, F]] =
+
+  def createInMemory[F[_]: Concurrent, K, V]: F[Store[K, V, F]] =
     MVar.of[F, Map[K, V]](Map.empty[K, V]).map {
       new InMemoryStore[F, K, V](_)
     }

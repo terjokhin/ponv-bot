@@ -11,20 +11,21 @@ import scala.io.StdIn
 
 object BotApp extends IOApp {
 
-  def app[F[_] : ConcurrentEffect, K, V] = for {
-    store <- Store.createInMemory[F, K, V]
-    console = Console.apply[F]
-    config = Config.apply[F]
-    token <- config.token
-    _ <- console.print("Store created.")
-    parser = Parser.apply[F]
-    executor = CommandExecutor.apply[F]
-    bot = new PonvBot[F, K, V](token, store, console, parser, executor)
-    _ <- Sync[F].delay(bot.run())
-    _ <- console.print("Bot Started. Enter any key to stop.")
-    _ <- Sync[F].delay(StdIn.readLine())
-    _ <- Sync[F].delay(bot.shutdown())
-  } yield bot
+  def app[F[_]: ConcurrentEffect, K, V] =
+    for {
+      store <- Store.createInMemory[F, K, V]
+      console = Console.apply[F]
+      config = Config.apply[F]
+      token <- config.token
+      _     <- console.print("Store created.")
+      parser = Parser.apply[F]
+      executor = CommandExecutor.apply[F]
+      bot = new PonvBot[F, K, V](token, store, console, parser, executor)
+      _ <- Sync[F].delay(bot.run())
+      _ <- console.print("Bot Started. Enter any key to stop.")
+      _ <- Sync[F].delay(StdIn.readLine())
+      _ <- Sync[F].delay(bot.shutdown())
+    } yield bot
 
   override def run(args: List[String]): IO[ExitCode] = app[IO, Long, Long] as ExitCode.Success
 }
